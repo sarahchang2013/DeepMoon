@@ -517,6 +517,8 @@ def train_and_test_model(Data, Craters, MP, i_MP):
                 inputs, targets = inputs.to(device), targets.to(device)
                 outputs = model(inputs)
                 loss = criterion(outputs, targets)
+                # Add L2 regularization for consistency with training
+                loss = loss + model.get_l2_loss()
                 val_loss += loss.item()
                 val_batches += 1
         
@@ -547,6 +549,13 @@ def train_and_test_model(Data, Craters, MP, i_MP):
             'optimizer_state_dict': optimizer.state_dict(),
             'epoch': epoch,
             'loss': avg_val_loss,
+            'model_params': {
+                'n_filters': n_filters,
+                'FL': FL,
+                'init': init,
+                'lmbda': lmbda,
+                'drop': drop
+            }
         }, MP['save_dir'])
         print(f"Model saved to {MP['save_dir']}")
 

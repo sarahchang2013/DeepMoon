@@ -47,8 +47,24 @@ def get_model_preds(CP):
     # Load checkpoint
     checkpoint = torch.load(CP['dir_model'], map_location=device)
     
-    # Initialize model with default parameters (should match training params)
-    model = UNet(n_filters=112, FL=3, init='he_normal', lmbda=1e-6, drop=0.15)
+    # Try to load hyperparameters from checkpoint, fall back to defaults if not available
+    # These defaults match the standard training configuration in run_model_train.py
+    model_params = checkpoint.get('model_params', {
+        'n_filters': 112,
+        'FL': 3,
+        'init': 'he_normal',
+        'lmbda': 1e-6,
+        'drop': 0.15
+    })
+    
+    # Initialize model with saved or default parameters
+    model = UNet(
+        n_filters=model_params.get('n_filters', 112),
+        FL=model_params.get('FL', 3),
+        init=model_params.get('init', 'he_normal'),
+        lmbda=model_params.get('lmbda', 1e-6),
+        drop=model_params.get('drop', 0.15)
+    )
     model.load_state_dict(checkpoint['model_state_dict'])
     model = model.to(device)
     model.eval()
