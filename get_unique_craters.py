@@ -9,10 +9,11 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 import h5py
 import sys
+import torch
 import utils.template_match_target as tmt
 import utils.processing as proc
 import utils.transform as trf
-#from keras.models import load_model
+from model_train import UNet
 
 #########################
 def get_model_preds(CP):
@@ -40,8 +41,22 @@ def get_model_preds(CP):
     data.close()
     proc.preprocess(Data)
 
-    model = load_model(CP['dir_model'])
-    preds = model.predict(Data[dtype][0])
+    # Load PyTorch model
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    
+    # Load checkpoint
+    checkpoint = torch.load(CP['dir_model'], map_location=device)
+    
+    # Initialize model with default parameters (should match training params)
+    model = UNet(n_filters=112, FL=3, init='he_normal', lmbda=1e-6, drop=0.15)
+    model.load_state_dict(checkpoint['model_state_dict'])
+    model = model.to(device)
+    model.eval()
+    
+    # Make predictions
+    with torch.no_grad():
+        X = torch.from_numpy(Data[dtype][0]).permute(0, 3, 1, 2).float().to(device)
+        preds = model(X).cpu().numpy()
 
     # save
     h5f = h5py.File(CP['dir_preds'], 'w')

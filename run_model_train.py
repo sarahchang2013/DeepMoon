@@ -29,7 +29,7 @@ MP['n_test'] = 5000
 
 # Save model (binary flag) and directory.
 MP['save_models'] = 1
-MP['save_dir'] = 'models/model.h5'
+MP['save_dir'] = 'models/model.pt'
 
 # Model Parameters (to potentially iterate over, keep in lists).
 MP['N_runs'] = 1                # Number of runs
