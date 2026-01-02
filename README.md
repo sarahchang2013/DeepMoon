@@ -2,11 +2,14 @@
 Center for Planetary Sciences / Department of Astronomy & Astrophysics / Canadian Institute for Theoretical Astrophysics
 University of Toronto
 
-DeepMoon is a TensorFlow-based pipeline for training a convolutional neural
+DeepMoon is a PyTorch-based pipeline for training a convolutional neural
 network (CNN) to recognize craters on the Moon, and determine their positions and
 radii.  It is the companion repo to the paper 
 [Lunar Crater Identification via Deep Learning](https://arxiv.org/abs/1803.02192), which
 describes the motivation and development of the code, as well as results.
+
+**Note**: This repository has been migrated from TensorFlow/Keras to PyTorch while
+maintaining the same U-Net architecture and model parameters.
 
 ## Getting Started
 
@@ -30,22 +33,20 @@ the second is a sample image taken from the web.
 
 DeepMoon requires the following packages to function:
 
-- [Python](https://www.python.org/) version 2.7 or 3.5+
+- [Python](https://www.python.org/) version 3.5+
+- [PyTorch](https://pytorch.org/) >= 1.9.0
+- [torchvision](https://pytorch.org/vision/) >= 0.10.0
 - [Cartopy](http://scitools.org.uk/cartopy/) >= 0.14.2.  Cartopy itself has a
 number of [dependencies](http://scitools.org.uk/cartopy/docs/latest/installing.html#installing),
 including the GEOS and Proj.4.x libraries.  (For Ubuntu systems, these can be
 installed through the `libgeos++-dev` and `libproj-dev` packages,
 respectively.)
 - [h5py](http://www.h5py.org/) >= 2.6.0
-- [Keras](https://keras.io/) 1.2.2 [(documentation)](https://faroit.github.io/keras-docs/1.2.2/);
-  also tested with Keras >= 2.0.2
 - [Numpy](http://www.numpy.org/) >= 1.12
 - [OpenCV](https://pypi.python.org/pypi/opencv-python) >= 3.2.0.6
 - [*pandas*](https://pandas.pydata.org/) >= 0.19.1
 - [Pillow](https://python-pillow.org/) >= 3.1.2
 - [PyTables](http://www.pytables.org/) >=3.4.2
-- [TensorFlow](https://www.tensorflow.org/) 0.10.0rc0, also tested with
-  TensorFlow >= 1.0
 
 This list can also be found in the `requirements.txt`.
 
